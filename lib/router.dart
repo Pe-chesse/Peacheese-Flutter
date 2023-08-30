@@ -12,7 +12,7 @@ import 'package:peach_market/pages/user/profile_edit.dart';
 import 'package:peach_market/widgets/bottom_navigation.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/sign',
   observers: [FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)],
   routes: [
     GoRoute(
