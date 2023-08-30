@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "593851971281",
+    "project_id": "peach-market-a370b",
+    "storage_bucket": "peach-market-a370b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593851971281:android:e999f0acb4a96e3fd2b7f0",
+        "android_client_info": {
+          "package_name": "com.peacheese.peach_market"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593851971281-mkibelkvgjkaai9hmmeluuoebvrarff7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3s6HhaZVGd4ii59kNQAUQr9TDWR33Sj0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593851971281-m4ad4gub9nvtundmlctnf905ecof43vo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
