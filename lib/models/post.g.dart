@@ -12,7 +12,7 @@ Post _$PostFromJson(Map<String, dynamic> json) {
     comment_set: (json['comment_set'] as List<dynamic>)
         .map((e) => Comment.fromJson(e as Map<String, dynamic>))
         .toList(),
-    like_set_length: json['like_set_length'] as int,
+    like_length: json['like_length'] as int,
     is_like: json['is_like'] as bool,
   );
 }
@@ -25,6 +25,6 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
   'updated_at': instance.updated_at.toIso8601String(),
   'created_at': instance.created_at.toIso8601String(),
   'comment_set': instance.comment_set.map((e) => e.toJson()).toList(),
-  'like_set_length': instance.like_set_length,
+  'like_length': instance.like_length,
   'is_like': instance.is_like,
 };

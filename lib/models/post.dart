@@ -15,7 +15,8 @@ class Post {
   final DateTime updated_at;
   final DateTime created_at;
   final List<Comment> comment_set;
-  final int like_set_length;
+  final int? comment_length;
+  final int like_length;
   final bool is_like;
 
   Post({
@@ -26,7 +27,8 @@ class Post {
     required this.updated_at,
     required this.created_at,
     required this.comment_set,
-    required this.like_set_length,
+    this.comment_length,
+    required this.like_length,
     required this.is_like,
   });
 
