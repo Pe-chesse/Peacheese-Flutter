@@ -1,165 +1,116 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:peach_market/providers/post.dart';
+import 'package:peach_market/providers/user.dart';
+import 'package:peach_market/utils/time_ago.dart';
+import 'package:peach_market/widgets/post/comment.dart';
+import 'package:peach_market/widgets/post/comment_input.dart';
+import 'package:peach_market/widgets/post/image_viewer.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
-class PostDetailPage extends ConsumerWidget {
-  const PostDetailPage({super.key,required this.id});
+class PostDetailPage extends ConsumerStatefulWidget {
+  const PostDetailPage({super.key, required this.id});
+
   final int id;
 
   @override
-  Widget build(BuildContext context,ref) {
-    final pageProvider = StateProvider.autoDispose((ref) => 0);
+  PostDetailPageState createState() => PostDetailPageState();
+}
+
+class PostDetailPageState extends ConsumerState<PostDetailPage> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(postDetailProvider.notifier).fetchPostDetail(widget.id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final post = ref.watch(postDetailProvider);
+    final user = ref.watch(userStateNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(
         actions: [
+          if(post.user == user)
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.more_vert),
           )
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      body: post.id == 0
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
                       children: [
-                        const UserProfileImageWidget(),
-                        const SizedBox(width: 10),
-                        Consumer(builder: (context, ref, _) {
-                          final PageController pageController = PageController();
-                          final pageState = ref.watch(pageProvider);
-                          return Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Row(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              UserProfileImageWidget(
+                                  imageURL: post.user.image_url),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      child: Text(
-                                          '행복한 복숭아 농장행복한 복숭아 농장행복한 복숭아 농장123',
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    Text('3일 전'),
-                                  ],
-                                ),
-                                const SizedBox(height: 20),
-                                const Text('벌써 복숭아의 계절이네요\n오늘 수확한 복숭아가 너무 좋아요 ~'),
-                                const SizedBox(height: 10),
-                                SizedBox(
-                                  height: 200,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Stack(
+                                    Row(
                                       children: [
-                                        PageView.builder(
-                                          onPageChanged: (value) => ref
-                                              .read(pageProvider.notifier)
-                                              .state = value,
-                                          controller: pageController,
-                                          clipBehavior: Clip.hardEdge,
-                                          itemCount: 3,
-                                          itemBuilder: (context, index) =>
-                                              Image.network(
-                                                  'https://picsum.photos/200/300',
-                                                  fit: BoxFit.cover),
+                                        Expanded(
+                                          child: Text(
+                                              post.user.nickname ?? '알 수 없음',
+                                              overflow: TextOverflow.ellipsis),
                                         ),
-                                        Align(
-                                          alignment: const Alignment(0, 0.9),
-                                          child: Wrap(
-                                            spacing: 6,
-                                            children: [0, 0, 0]
-                                                .asMap()
-                                                .entries
-                                                .map((e) => CircleAvatar(
-                                                      radius: 4,
-                                                      backgroundColor:
-                                                          pageState == e.key
-                                                              ? Theme.of(context)
-                                                                  .colorScheme
-                                                                  .primary
-                                                              : Colors.white,
-                                                    ))
-                                                .toList(),
-                                          ),
-                                        ),
+                                        Text(timeAgo(post.created_at)),
                                       ],
                                     ),
-                                  ),
+                                    const SizedBox(height: 20),
+                                    Text(post.body),
+                                    const SizedBox(height: 10),
+                                    if (post.image_url!.isNotEmpty)
+                                      ImageViewerWidget(
+                                          imageUrl: post.image_url!),
+                                    const SizedBox(height: 10),
+                                    Text.rich(TextSpan(children: [
+                                      const WidgetSpan(
+                                          child: Icon(CupertinoIcons.heart,
+                                              size: 20),
+                                          alignment:
+                                              PlaceholderAlignment.middle),
+                                      TextSpan(text: ' ${post.like_length}'),
+                                    ])),
+                                    const SizedBox(height: 30),
+                                  ],
                                 ),
-                                const SizedBox(height: 10),
-                                const Text.rich(TextSpan(children: [
-                                  WidgetSpan(
-                                      child: Icon(CupertinoIcons.heart, size: 20),
-                                      alignment: PlaceholderAlignment.middle),
-                                  TextSpan(text: ' 30'),
-                                ])),
-                                const SizedBox(height: 40),
-                              ],
-                            ),
-                          );
-                        }),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: post.comment_set!
+                                .map<Widget>(
+                                    (e) => PostCommentWidget(comment: e))
+                                .toList(),
+                          ),
+                        )
                       ],
                     ),
                   ),
-                  const Divider(),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        // PostCommentWidget(),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(
-                      top: BorderSide(color: Theme.of(context).focusColor))),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SafeArea(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Chip(
-                      label: Text('댓글: 홍가네 복숭아'),
-                      deleteIcon: Icon(Icons.cancel, size: 16),
-                      onDeleted: () {},
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: TextFormField(
-                          minLines: 1,
-                          maxLines: 5,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: '댓글 입력하기...',
-                          ),
-                        )),
-                        SizedBox(
-                          width: 36,
-                          child: IconButton(
-                              onPressed: () {}, icon: const Icon(Icons.edit)),
-                        ),
-                      ],
-                    ),
-                  ],
                 ),
-              )),
-        ],
-      ),
+                CommentInputWidget(postId: post.id)
+              ],
+            ),
     );
   }
 }

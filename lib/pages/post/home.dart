@@ -5,11 +5,17 @@ import 'package:peach_market/providers/post.dart';
 import 'package:peach_market/widgets/post/preview.dart';
 
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  HomePageState createState() => HomePageState();
+}
+
+class HomePageState extends ConsumerState<HomePage> {
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(postlistProvider);
     return Scaffold(
         appBar: AppBar(

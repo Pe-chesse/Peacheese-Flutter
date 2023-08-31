@@ -19,8 +19,10 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const MainBottomNavigation(),
       routes: [
         GoRoute(
-          path: 'post_detail',
-          builder: (context, state) => const PostDetailPage(),
+          path: 'post_detail/:id',
+          builder: (context, state) {
+            return PostDetailPage(id: int.parse(state.pathParameters['id']!));
+          },
         ),
         GoRoute(
           path: 'chat_room',

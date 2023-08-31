@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:peach_market/models/comment.dart';
+import 'package:peach_market/utils/time_ago.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
 class PostCommentWidget extends StatelessWidget {
-  const PostCommentWidget({super.key, this.comment});
+  const PostCommentWidget({super.key, required this.comment});
 
-  final Comment? comment;
+  final Comment comment;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,8 @@ class PostCommentWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const UserProfileImageWidget(radius: 16),
+                UserProfileImageWidget(
+                    radius: 16, imageURL: comment.user.image_url),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -26,24 +28,25 @@ class PostCommentWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '복자네 복숭아',
+                            comment.user.nickname ?? '알 수 없음',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const Spacer(),
                           Text(
-                            '4시간 전',
+                            timeAgo(comment.created_at),
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
                       ),
-                      const Text('좋은 글귀네요~ 좋아요 누르고 갑니다')
+                      Text(comment.body),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
               ],
             ),
           ] +
-          comment!.child_comments
+          comment.child_comments
               .map((e) => Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: PostCommentWidget(comment: e),

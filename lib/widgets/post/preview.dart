@@ -15,7 +15,7 @@ class PostPreviewWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: InkWell(
-        onTap: () => context.go('/post_detail'),
+        onTap: () => context.go('/post_detail/${post.id}'),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
