@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:peach_market/pages/bottom_navigation/home.dart';
+import 'package:peach_market/pages/post/home.dart';
 import 'package:peach_market/pages/chat/main.dart';
 import 'package:peach_market/pages/user/profile.dart';
 

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:peach_market/widgets/bottom_sheet/chat_room.dart';
 import 'package:peach_market/widgets/chat/chat_box_from_me.dart';
 import 'package:peach_market/widgets/chat/chat_box_from_user.dart';
-import 'package:peach_market/widgets/user/profile_image.dart';
 
 class ChatRoomPage extends StatefulWidget {
   const ChatRoomPage({super.key});

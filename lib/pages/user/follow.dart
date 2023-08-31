@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:peach_market/widgets/user/follow_tile.dart';
-import 'package:peach_market/widgets/user/profile_image.dart';
 
 class UserFollowPage extends StatelessWidget {
   const UserFollowPage({super.key});

@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:peach_market/models/post.dart';
+import 'package:peach_market/utils/time_ago.dart';
 import 'package:peach_market/widgets/bottom_sheet/post.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
 class PostPreviewWidget extends StatelessWidget {
-  const PostPreviewWidget({super.key});
+  const PostPreviewWidget({super.key,required this.post});
+  final Post post;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class PostPreviewWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const UserProfileImageWidget(),
+            UserProfileImageWidget(imageURL: post.user.image_url),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -24,45 +27,46 @@ class PostPreviewWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Expanded(
-                        child: Text('행복한 복숭아 농장행복한 복숭아 농장행복한 복숭아 농장123',
+                      Expanded(
+                        child: Text(post.user.nickname??'알 수 없음',
                             overflow: TextOverflow.ellipsis),
                       ),
-                      Text('3일 전'),
-                      SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: IconButton(
-                          onPressed: ()=>const PostBottomSheet().show(context),
-                          padding: EdgeInsets.all(0),
-                          icon: const Icon(Icons.more_vert),
-                        ),
-                      )
+                      Text(timeAgo(post.created_at)),
+                      // SizedBox(
+                      //   height: 24,
+                      //   width: 24,
+                      //   child: IconButton(
+                      //     onPressed: ()=>const PostBottomSheet().show(context),
+                      //     padding: const EdgeInsets.all(0),
+                      //     icon: const Icon(Icons.more_vert),
+                      //   ),
+                      // )
                     ],
                   ),
                   const SizedBox(height: 20),
-                  const Text('벌써 복숭아의 계절이네요\n오늘 수확한 복숭아가 너무 좋아요 ~'),
+                  Text(post.body),
                   const SizedBox(height: 10),
+                  if(post.image_url!.isNotEmpty)
                   Container(
                     height: 200,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                           image:
-                              Image.network('https://picsum.photos/200/300').image,
+                              Image.network(post.image_url!.first).image,
                           fit: BoxFit.fitWidth),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text.rich(TextSpan(children: [
-                    WidgetSpan(
+                  Text.rich(TextSpan(children: [
+                    const WidgetSpan(
                         child: Icon(CupertinoIcons.heart, size: 20),
                         alignment: PlaceholderAlignment.middle),
-                    TextSpan(text: ' 30    '),
-                    WidgetSpan(
+                    TextSpan(text: ' ${post.like_length}    '),
+                    const WidgetSpan(
                         child: Icon(CupertinoIcons.chat_bubble_text, size: 20),
                         alignment: PlaceholderAlignment.middle),
-                    TextSpan(text: ' 18'),
+                    TextSpan(text: ' ${post.comment_length}'),
                   ]))
                 ],
               ),

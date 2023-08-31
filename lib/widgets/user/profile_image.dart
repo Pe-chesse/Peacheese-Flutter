@@ -10,7 +10,7 @@ class UserProfileImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
         radius: radius,
-        backgroundImage: imageURL == null
+        backgroundImage: imageURL?.isEmpty??true
             ? Image.asset('assets/images/default_user_profile_img.png').image
             : Image.network(imageURL!).image);
   }
