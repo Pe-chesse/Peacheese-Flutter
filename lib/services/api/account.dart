@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:peach_market/models/user.dart';
 
 class AccountAPI {
   final Dio _dio;
@@ -7,7 +8,8 @@ class AccountAPI {
 
   Future verify() async {
     try {
-      return await _dio.get('account/verify/');
+      Response response = await _dio.get('account/verify/');
+      return User.fromJson(response.data);
     } on DioException catch (e) {
       return e.response;
     }
@@ -15,13 +17,13 @@ class AccountAPI {
 
   Future getProfile(String user) async {
     try {
-      return await _dio.get(
-        'account/profile/',
-        queryParameters: {
-          'user': user,
-        },
+      Response response = await _dio.get(
+        'account/profile/?user=$user',
       );
+      print(response.data);
+      return User.fromJson(response.data);
     } on DioException catch (e) {
+      print(e);
       return e.response;
     }
   }
@@ -29,10 +31,9 @@ class AccountAPI {
   Future updateProfile(String user) async {
     try {
       return await _dio.put(
-        'account/profile/',
-        data: {
-
-        }
+          'account/profile/',
+          data: {
+          }
       );
     } on DioException catch (e) {
       return e.response;

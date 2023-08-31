@@ -3,10 +3,11 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peach_market/services/api/account.dart';
+import 'package:peach_market/services/api/post.dart';
 
 class API{
   static String BASE_ADDRESS = '3.37.239.49';
-  static String BASE_URL = 'http://$BASE_URL/api/v1/';
+  static String BASE_URL = 'http://$BASE_ADDRESS/api/v1/';
   static final Dio _dio = Dio(BaseOptions(
     baseUrl: BASE_URL
   ));
@@ -23,4 +24,5 @@ class API{
 
 
   static final AccountAPI account = AccountAPI(API.dio);
+  static final PostAPI post = PostAPI(API.dio);
 }
