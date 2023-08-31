@@ -1,7 +1,4 @@
 // ignore_for_file: non_constant_identifier_names, depend_on_referenced_packages
-
-import 'dart:js_interop';
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';

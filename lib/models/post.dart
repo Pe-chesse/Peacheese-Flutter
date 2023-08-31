@@ -11,10 +11,10 @@ class Post {
   final int id;
   final String body;
   final User user;
-  final List<String> image_url;
+  final List<String>? image_url;
   final DateTime updated_at;
   final DateTime created_at;
-  final List<Comment> comment_set;
+  final List<Comment>? comment_set;
   final int? comment_length;
   final int like_length;
   final bool is_like;
@@ -23,15 +23,14 @@ class Post {
     required this.id,
     required this.body,
     required this.user,
-    required this.image_url,
+    this.image_url,
     required this.updated_at,
     required this.created_at,
-    required this.comment_set,
+    this.comment_set,
     this.comment_length,
     required this.like_length,
     required this.is_like,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
-  Map<String, dynamic> toJson() => _$PostToJson(this);
 }
