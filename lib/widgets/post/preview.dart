@@ -7,7 +7,8 @@ import 'package:peach_market/widgets/bottom_sheet/post.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
 class PostPreviewWidget extends StatelessWidget {
-  const PostPreviewWidget({super.key,required this.post});
+  const PostPreviewWidget({super.key, required this.post});
+
   final Post post;
 
   @override
@@ -28,39 +29,35 @@ class PostPreviewWidget extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(post.user.nickname??'알 수 없음',
+                        child: Text(post.user.nickname ?? '알 수 없음',
                             overflow: TextOverflow.ellipsis),
                       ),
                       Text(timeAgo(post.created_at)),
-                      // SizedBox(
-                      //   height: 24,
-                      //   width: 24,
-                      //   child: IconButton(
-                      //     onPressed: ()=>const PostBottomSheet().show(context),
-                      //     padding: const EdgeInsets.all(0),
-                      //     icon: const Icon(Icons.more_vert),
-                      //   ),
-                      // )
                     ],
                   ),
                   const SizedBox(height: 20),
                   Text(post.body),
                   const SizedBox(height: 10),
-                  if(post.image_url!.isNotEmpty)
-                  Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          image:
-                              Image.network(post.image_url!.first).image,
-                          fit: BoxFit.fitWidth),
+                  if (post.image_url!.isNotEmpty)
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            image: Image.network(post.image_url!.first).image,
+                            fit: BoxFit.fitWidth),
+                      ),
                     ),
-                  ),
                   const SizedBox(height: 20),
                   Text.rich(TextSpan(children: [
-                    const WidgetSpan(
-                        child: Icon(CupertinoIcons.heart, size: 20),
+                    WidgetSpan(
+                        child: post.is_like
+                            ? const Icon(
+                                CupertinoIcons.heart_fill,
+                                color: Colors.red,
+                                size: 20,
+                              )
+                            : const Icon(CupertinoIcons.heart, size: 20),
                         alignment: PlaceholderAlignment.middle),
                     TextSpan(text: ' ${post.like_length}    '),
                     const WidgetSpan(

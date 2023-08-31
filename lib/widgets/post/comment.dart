@@ -1,57 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:peach_market/models/comment.dart';
+import 'package:peach_market/providers/post.dart';
 import 'package:peach_market/utils/time_ago.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
-class PostCommentWidget extends StatelessWidget {
-  const PostCommentWidget({super.key, required this.comment});
+class PostCommentWidget extends ConsumerWidget {
+  const PostCommentWidget({super.key, required this.comment,this.isChild});
 
   final Comment comment;
+  final bool? isChild;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                UserProfileImageWidget(
-                    radius: 16, imageURL: comment.user.image_url),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
+  Widget build(BuildContext context, ref) {
+    final selectComment = ref.watch(commentSelectProvider);
+    final selectCommentNotifier = ref.read(commentSelectProvider.notifier);
+    return Container(
+      padding:isChild==true? const EdgeInsets.fromLTRB(4, 4, 0, 0):const EdgeInsets.only(bottom: 20),
+      margin:isChild==true? const EdgeInsets.only(left: 16):null,
+      decoration: isChild==true
+          ? const BoxDecoration(border: Border(left: BorderSide(color: Colors.grey,width: 1)))
+          : null,
+      child: Column(
+        children: <Widget>[
+              InkWell(
+                child: Container(
+                  decoration: selectComment == comment
+                      ? BoxDecoration(color: Theme.of(context).primaryColor)
+                      : null,
+                  child: Row(
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            comment.user.nickname ?? '알 수 없음',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const Spacer(),
-                          Text(
-                            timeAgo(comment.created_at),
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
+                      Container(
+                        width: 2,
+                        color: Colors.black,
                       ),
-                      Text(comment.body),
-                      const SizedBox(height: 10),
+                      UserProfileImageWidget(
+                          radius: 16, imageURL: comment.user.image_url),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => selectCommentNotifier.select(comment),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    comment.user.nickname ?? '알 수 없음',
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    timeAgo(comment.created_at),
+                                    style: Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ],
+                              ),
+                              Text(comment.body)
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ] +
-          comment.child_comments
-              .map((e) => Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: PostCommentWidget(comment: e),
-                  ))
-              .toList(),
+              ),
+            ] +
+            comment.child_comments
+                .map((e) => PostCommentWidget(comment: e,isChild: true,))
+                .toList(),
+      ),
     );
   }
 }

@@ -16,6 +16,8 @@ class CommentInputWidgetState extends ConsumerState<CommentInputWidget> {
   final TextEditingController editingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final comment = ref.watch(commentSelectProvider);
+    final commentNotifier = ref.read(commentSelectProvider.notifier);
     return
       Container(
           decoration: BoxDecoration(
@@ -28,10 +30,11 @@ class CommentInputWidgetState extends ConsumerState<CommentInputWidget> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if(comment.id != 0)
                 Chip(
-                  label: Text('댓글: 홍가네 복숭아'),
-                  deleteIcon: Icon(Icons.cancel, size: 16),
-                  onDeleted: () {},
+                  label: Text('댓글: ${comment.user.nickname}'),
+                  deleteIcon: const Icon(Icons.cancel, size: 16),
+                  onDeleted: () =>commentNotifier.init(),
                 ),
                 Row(
                   children: [
@@ -52,8 +55,13 @@ class CommentInputWidgetState extends ConsumerState<CommentInputWidget> {
                             if(editingController.text.isEmpty){
                               return const DefaultMessageDialog(title: '내용을 입력해주세요.').show(context);
                             }
-                            await API.post.writeComment(widget.postId, editingController.text);
+                            if(comment.id == 0){
+                              await API.post.writeComment(widget.postId, editingController.text);
+                            }else{
+                              await API.post.reWriteComment(comment.id, editingController.text);
+                            }
                             editingController.clear();
+                            commentNotifier.init();
                             ref.read(postDetailProvider.notifier).fetchPostDetail(widget.postId);
                           }, icon: const Icon(Icons.edit)),
                     ),
