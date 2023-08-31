@@ -25,10 +25,22 @@ class PostAPI {
     }
   }
 
+  Future writePost(String body, List imageKey) async {
+    try {
+      Response response = await _dio.post('post/', data: {
+        'body': body,
+        if (imageKey.isNotEmpty) 'image_keys': imageKey
+      });
+      return response.data['id'];
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+
   Future writeComment(int postId, String body) async {
     try {
       Response response =
-      await _dio.post('post/$postId/', data: {'body': body});
+          await _dio.post('post/$postId/', data: {'body': body});
       return response.statusCode == 201;
     } on DioException catch (e) {
       return e.response;
@@ -38,7 +50,7 @@ class PostAPI {
   Future reWriteComment(int commentId, String body) async {
     try {
       Response response =
-      await _dio.post('post/comment/$commentId/', data: {'body': body});
+          await _dio.post('post/comment/$commentId/', data: {'body': body});
       return response.statusCode == 201;
     } on DioException catch (e) {
       return e.response;
@@ -47,9 +59,7 @@ class PostAPI {
 
   Future like(int postId) async {
     try {
-      return await _dio.post('post/like/',data: {
-        'post':postId
-      });
+      return await _dio.post('post/like/', data: {'post': postId});
     } on DioException catch (e) {
       return e.response;
     }

@@ -15,7 +15,7 @@ class ChatRoomBottomSheet extends ModalBottomSheet {
           ListTile(
             onTap: (){
               Navigator.of(context).pop();
-              const ChatRoomUserListDialog().show(context);
+              const ChatRoomUserListDialog(members: [],).show(context);
             },
             title: const Text('참여자 보기'),
           ),

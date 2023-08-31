@@ -10,6 +10,7 @@ class ImageViewerWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    print(imageUrl);
     final PageController pageController = PageController();
     final pageState = ref.watch(pageProvider);
     return SizedBox(
@@ -31,7 +32,7 @@ class ImageViewerWidget extends ConsumerWidget {
               alignment: const Alignment(0, 0.9),
               child: Wrap(
                 spacing: 6,
-                children: [0, 0, 0]
+                children: imageUrl
                     .asMap()
                     .entries
                     .map((e) => CircleAvatar(

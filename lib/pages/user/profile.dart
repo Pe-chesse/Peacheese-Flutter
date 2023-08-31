@@ -58,7 +58,7 @@ class UserProfilePage extends ConsumerWidget {
                                 ),
                               ),
                               UserProfileImageWidget(
-                                  radius: 36, imageURL: data['user'].image_url),
+                                  radius: 36, user: data['user']),
                               InkWell(
                                 onTap: () => context.go('/follow'),
                                 child: Column(

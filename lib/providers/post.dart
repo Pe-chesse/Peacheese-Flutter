@@ -12,7 +12,7 @@ final postDetailProvider =
   return PostDetailNotifier();
 });
 
-final imageKeyProvider = StateProvider((ref) => []);
+final imageKeyProvider = StateProvider.autoDispose((ref) => []);
 
 
 class PostDetailNotifier extends StateNotifier<Post> {

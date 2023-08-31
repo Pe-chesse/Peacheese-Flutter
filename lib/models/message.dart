@@ -9,12 +9,14 @@ part 'message.g.dart';
 class Message {
   final int num;
   final String chat_room;
+  final String content;
   final User user;
   final DateTime time;
 
   Message({
     required this.num,
     required this.chat_room,
+    required this.content,
     required this.user,
     required this.time,
   });

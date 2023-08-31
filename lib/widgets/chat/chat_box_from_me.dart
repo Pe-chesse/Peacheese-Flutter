@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:peach_market/models/message.dart';
+import 'package:peach_market/utils/time_ago.dart';
 
 class ChatBoxFromMeWidget extends StatelessWidget {
-  const ChatBoxFromMeWidget({super.key,required this.maxWidth});
+  const ChatBoxFromMeWidget({super.key,required this.maxWidth,required this.message});
 
+  final Message message;
   final double maxWidth;
 
   @override
@@ -25,7 +28,7 @@ class ChatBoxFromMeWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                '12:39',
+                timeAgo(message.time),
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
@@ -41,9 +44,8 @@ class ChatBoxFromMeWidget extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(10)
                     .copyWith(topRight: const Radius.circular(0))),
-            child: const Text(
-              '변명 중에서도 가장 어리석고 못난 변명은 “시간이 없어서"라는 변명이다.',
-              style: TextStyle(
+            child: Text(message.content,
+              style: const TextStyle(
                 color: Colors.white,
               ),
             ),

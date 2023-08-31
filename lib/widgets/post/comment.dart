@@ -37,7 +37,7 @@ class PostCommentWidget extends ConsumerWidget {
                         color: Colors.black,
                       ),
                       UserProfileImageWidget(
-                          radius: 16, imageURL: comment.user.image_url),
+                          radius: 16, user: comment.user),
                       const SizedBox(width: 10),
                       Expanded(
                         child: InkWell(

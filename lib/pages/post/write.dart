@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peach_market/providers/post.dart';
+import 'package:peach_market/providers/user.dart';
 import 'package:peach_market/services/api.dart';
+import 'package:peach_market/widgets/dialog/default.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
 class PostWritePage extends ConsumerWidget {
@@ -11,13 +14,21 @@ class PostWritePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final imageKeyState = ref.watch(imageKeyProvider);
+    print(ref.read(userStateNotifierProvider));
     final TextEditingController editingController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: const Text('🍑 글 쓰기'),
         actions: [
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+              if (editingController.text.trim().isEmpty) {
+                return DefaultMessageDialog(title: '내용을 작성해주세요!').show(context);
+              }
+              await API.post
+                  .writePost(editingController.text.trim(), imageKeyState)
+                  .then((postId) => context.go('/post_detail/$postId'));
+            },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: Theme.of(context).primaryColor,
@@ -51,10 +62,11 @@ class PostWritePage extends ConsumerWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const UserProfileImageWidget(),
+                  UserProfileImageWidget(user: ref.read(userStateNotifierProvider)),
                   const SizedBox(width: 10),
                   Expanded(
                     child: TextFormField(
+                      controller: editingController,
                       autofocus: true,
                       minLines: 1,
                       maxLines: 100,

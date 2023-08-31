@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:peach_market/models/user.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
 class UserFollowTileWidget extends StatelessWidget {
-  const UserFollowTileWidget({super.key});
+  const UserFollowTileWidget({super.key,required this.user});
+  final User user;
 
   Widget followButton(BuildContext context,bool follow){
     if(follow){
@@ -36,10 +38,10 @@ class UserFollowTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const UserProfileImageWidget(),
-      title: Text('복숭아집 밤비네',style: Theme.of(context).textTheme.titleMedium,),
+      leading: UserProfileImageWidget(user: user),
+      title: Text(user.nickname??'알 수 없음',style: Theme.of(context).textTheme.titleMedium,),
       subtitle: Text(
-        '전국 택배 배송 가능한 복숭아 어쩌구 저쩌구 전국 택배 배송 가능한 복숭아 어쩌구 저쩌구 전국 택배 배송 가능한 복숭아 어쩌구 저쩌구 ',
+        user.description??'',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(color: Theme.of(context).hintColor),

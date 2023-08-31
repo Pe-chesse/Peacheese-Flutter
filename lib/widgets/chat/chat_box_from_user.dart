@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:peach_market/models/message.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
 class ChatBoxFromUserWidget extends StatelessWidget {
-  const ChatBoxFromUserWidget({super.key, required this.maxWidth});
+  const ChatBoxFromUserWidget({super.key, required this.maxWidth,required this.message});
+
+  final Message message;
 
   final double maxWidth;
 
@@ -12,7 +15,7 @@ class ChatBoxFromUserWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const UserProfileImageWidget(radius: 16),
+        UserProfileImageWidget(radius: 16,user: message.user),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [

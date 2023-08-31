@@ -20,7 +20,7 @@ class PostPreviewWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            UserProfileImageWidget(imageURL: post.user.image_url),
+            UserProfileImageWidget(user: post.user),
             const SizedBox(width: 10),
             Expanded(
               child: Column(

@@ -4,18 +4,12 @@ import 'package:peach_market/widgets/bottom_sheet/chat_room.dart';
 import 'package:peach_market/widgets/chat/chat_box_from_me.dart';
 import 'package:peach_market/widgets/chat/chat_box_from_user.dart';
 
-class ChatRoomPage extends StatefulWidget {
+class ChatRoomPage extends StatelessWidget {
   const ChatRoomPage({super.key});
 
   @override
-  State<ChatRoomPage> createState() => _ChatRoomPageState();
-}
-
-class _ChatRoomPageState extends State<ChatRoomPage> {
-  final TextEditingController textController = TextEditingController();
-
-  @override
   Widget build(BuildContext context) {
+    final TextEditingController textController = TextEditingController();
     final chatboxMaxWidth = MediaQuery.of(context).size.width - 40 - 48 - 60;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),

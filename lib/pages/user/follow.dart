@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peach_market/models/user.dart';
 import 'package:peach_market/widgets/user/follow_tile.dart';
 
 class UserFollowPage extends StatelessWidget {
@@ -8,11 +9,11 @@ class UserFollowPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Followers'),
+        title: const Text('Followers'),
       ),
       body: ListView(
         children: [
-          UserFollowTileWidget(),
+          UserFollowTileWidget(user: [] as User),
         ],
       ),
     );

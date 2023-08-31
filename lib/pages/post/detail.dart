@@ -57,7 +57,7 @@ class PostDetailPageState extends ConsumerState<PostDetailPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               UserProfileImageWidget(
-                                  imageURL: post.user.image_url),
+                                  user: post.user),
                               const SizedBox(width: 10),
                               Expanded(
                                 child: Column(
