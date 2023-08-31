@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:peach_market/providers/post.dart';
+import 'package:peach_market/services/api.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
-class PostWritePage extends StatefulWidget {
+class PostWritePage extends ConsumerWidget {
   const PostWritePage({super.key});
 
   @override
-  State<PostWritePage> createState() => _PostWritePageState();
-}
-
-class _PostWritePageState extends State<PostWritePage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final imageKeyState = ref.watch(imageKeyProvider);
+    final TextEditingController editingController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: const Text('🍑 글 쓰기'),
@@ -27,7 +28,17 @@ class _PostWritePageState extends State<PostWritePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          final ImagePicker picker = ImagePicker();
+          final List<XFile> images = await picker.pickMultiImage();
+          if (images.isNotEmpty) {
+            var response = await API.bucket.upload(images);
+            if (response.statusCode == 201) {
+              ref.read(imageKeyProvider.notifier).state =
+                  response.data['image_keys'];
+            }
+          }
+        },
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         child: const Icon(Icons.image_outlined, size: 36, color: Colors.white),
@@ -60,21 +71,34 @@ class _PostWritePageState extends State<PostWritePage> {
                 scrollDirection: Axis.horizontal,
                 child: Wrap(
                   spacing: 10,
-                  children: [
-                    for (int i = 0; i < 20; i++)
-                      Container(
-                        width: 128,
-                        height: 128,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                              image:
-                                  Image.network('https://picsum.photos/200/300')
-                                      .image,
-                              fit: BoxFit.fitWidth),
-                        ),
-                      ),
-                  ],
+                  children: imageKeyState
+                      .map<Widget>((e) => Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              Container(
+                                width: 128,
+                                height: 128,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      image: Image.network(
+                                              '${API.BASE_URL}bucket/media/?key=$e')
+                                          .image,
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () =>
+                                    ref.read(imageKeyProvider.notifier).state =
+                                        imageKeyState
+                                            .where((element) => element != e)
+                                            .toList(),
+                                icon: const Icon(Icons.cancel),
+                                color: Colors.white,
+                              )
+                            ],
+                          ))
+                      .toList(),
                 ),
               ),
             ],

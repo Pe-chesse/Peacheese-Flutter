@@ -12,6 +12,9 @@ final postDetailProvider =
   return PostDetailNotifier();
 });
 
+final imageKeyProvider = StateProvider((ref) => []);
+
+
 class PostDetailNotifier extends StateNotifier<Post> {
   PostDetailNotifier()
       : super(Post(
