@@ -4,6 +4,12 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSCameraUsageDescription</key>
+   <string>Used to demonstrate image picker plugin</string>
+   <key>NSMicrophoneUsageDescription</key>
+   <string>Used to capture audio for image picker plugin</string>
+   <key>NSPhotoLibraryUsageDescription</key>
+   <string>Used to demonstrate image picker plugin</string>
 	<key>CFBundleDisplayName</key>
 	<string>Peach Market</string>
 	<key>CFBundleExecutable</key>
