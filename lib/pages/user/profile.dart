@@ -15,8 +15,10 @@ class UserProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final userState = ref.watch(userprofileProvider(nickname ?? ''));
-    return userState.when(
+    final userState = ref.watch(userStateNotifierProvider);
+    final profileState =
+        ref.watch(userprofileProvider(nickname ?? userState.nickname ?? ''));
+    return profileState.when(
         data: (data) => Scaffold(
               appBar: AppBar(
                 title: Text(nickname ?? '🍑 내 정보'),
@@ -43,7 +45,7 @@ class UserProfilePage extends ConsumerWidget {
                                 child: Column(
                                   children: [
                                     Text(
-                                      '2950',
+                                      '${data['user'].followers}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleLarge,
@@ -55,13 +57,14 @@ class UserProfilePage extends ConsumerWidget {
                                   ],
                                 ),
                               ),
-                              const UserProfileImageWidget(radius: 36),
+                              UserProfileImageWidget(
+                                  radius: 36, imageURL: data['user'].image_url),
                               InkWell(
                                 onTap: () => context.go('/follow'),
                                 child: Column(
                                   children: [
                                     Text(
-                                      '128',
+                                      '${data['user'].followings}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleLarge,
@@ -76,11 +79,11 @@ class UserProfilePage extends ConsumerWidget {
                             ],
                           ),
                           const SizedBox(height: 30),
-                          Text(data.nickname,
+                          Text(data['user'].nickname,
                               style: Theme.of(context).textTheme.titleMedium),
                           const SizedBox(height: 10),
                           Text(
-                            '복숭아 전국 배송, 복숭아 농장 체험, 복숭아 농장',
+                            data['user'].description ?? '',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -97,15 +100,17 @@ class UserProfilePage extends ConsumerWidget {
                                       color: Theme.of(context).focusColor)),
                             ),
                           ),
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                foregroundColor: Colors.white,
-                                elevation: 0,
-                                minimumSize: const Size(110, 36)),
-                            child: const Text('팔로우'),
-                          ),
+                          if (data['user'].nickname != userState.nickname)
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  foregroundColor: Colors.white,
+                                  elevation: 0,
+                                  minimumSize: const Size(110, 36)),
+                              child: const Text('팔로우'),
+                            ),
                           const SizedBox(height: 30),
                           Container(
                             decoration: BoxDecoration(
@@ -136,9 +141,10 @@ class UserProfilePage extends ConsumerWidget {
                               children: [
                                 ListView.separated(
                                   padding: const EdgeInsets.only(top: 10),
-                                  itemCount: 5,
+                                  itemCount: data['post'].length,
                                   itemBuilder: (context, index) =>
-                                      PostPreviewWidget(post: {} as Post),
+                                      PostPreviewWidget(
+                                          post: data['post'][index]),
                                   separatorBuilder: (context, index) =>
                                       const Divider(height: 30),
                                 ),
@@ -148,10 +154,9 @@ class UserProfilePage extends ConsumerWidget {
                                   childAspectRatio: 1 / 1,
                                   mainAxisSpacing: 12,
                                   crossAxisSpacing: 12,
-                                  children: [300, 400, 500, 600]
-                                      .map((e) => Image.network(
-                                          'https://picsum.photos/${e}',
-                                          fit: BoxFit.cover))
+                                  children: data['post'].where((e)=>e.image_url!.length != 0)
+                                      .map<Widget>((e) =>
+                                      Image.network(e.first, fit: BoxFit.cover))
                                       .toList(),
                                 ),
                               ],
@@ -164,7 +169,8 @@ class UserProfilePage extends ConsumerWidget {
                 );
               }),
             ),
-        error: (error, stackTrace) => Center(child: Text('$error')),
+        error: (error, stackTrace) =>
+            Center(child: Text('$error\n\n$stackTrace')),
         loading: () => const Center(
               child: CircularProgressIndicator(),
             ));

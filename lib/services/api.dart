@@ -15,13 +15,12 @@ class API{
   static Dio get dio {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async{
-        options.headers['Authoriziton'] = await FirebaseAuth.instance.currentUser?.getIdToken()??'';
+        options.headers['Authorization'] = await FirebaseAuth.instance.currentUser?.getIdToken()??'';
         return handler.next(options);
       },
     ));
     return _dio;
   }
-
 
   static final AccountAPI account = AccountAPI(API.dio);
   static final PostAPI post = PostAPI(API.dio);

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:peach_market/providers/user.dart';
 import 'package:peach_market/router.dart';
 import 'package:peach_market/style/theme.dart';
 import 'package:peach_market/utils/lifecycle_observer.dart';
@@ -26,6 +27,7 @@ class AppState extends ConsumerState<App> {
       if(!user.emailVerified){
         return await FirebaseAuth.instance.signOut();
       }
+      await ref.read(userStateNotifierProvider.notifier).get();
       router.go('/');
     });
     WidgetsBinding.instance.addObserver(AppLifecycleObserver(

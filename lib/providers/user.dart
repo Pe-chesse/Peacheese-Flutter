@@ -14,5 +14,5 @@ class UserNotifier extends StateNotifier<User> {
   Future get()async=> state = await API.account.verify();
 
 }
-final evaluateWriteProvider =
+final userStateNotifierProvider =
 StateNotifierProvider<UserNotifier, User>((ref) => UserNotifier());

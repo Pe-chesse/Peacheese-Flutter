@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
-class PostDetailPage extends StatelessWidget {
-  const PostDetailPage({super.key});
+class PostDetailPage extends ConsumerWidget {
+  const PostDetailPage({super.key,required this.id});
+  final int id;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,ref) {
     final pageProvider = StateProvider.autoDispose((ref) => 0);
     return Scaffold(
       appBar: AppBar(
