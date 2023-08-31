@@ -3,7 +3,8 @@ import 'package:peach_market/models/user.dart';
 import 'package:peach_market/widgets/user/follow_tile.dart';
 
 class UserFollowPage extends StatelessWidget {
-  const UserFollowPage({super.key});
+  const UserFollowPage({super.key,required this.follower});
+  final bool follower;
 
   @override
   Widget build(BuildContext context) {

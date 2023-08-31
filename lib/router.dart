@@ -7,6 +7,7 @@ import 'package:peach_market/pages/sign/login.dart';
 import 'package:peach_market/pages/sign/email_sign_in.dart';
 import 'package:peach_market/pages/sign/email_sign_up.dart';
 import 'package:peach_market/pages/user/follow.dart';
+import 'package:peach_market/pages/user/profile.dart';
 import 'package:peach_market/pages/user/profile_edit.dart';
 import 'package:peach_market/widgets/bottom_navigation.dart';
 
@@ -25,9 +26,16 @@ final GoRouter router = GoRouter(
           },
         ),
         GoRoute(
-          path: 'chat_room',
-          builder: (context, state) => const ChatRoomPage(),
+          path: 'profile',
+          builder: (context, state) {
+            final nickname = state.extra as String;
+            return UserProfilePage(nickname: nickname);
+          },
         ),
+        // GoRoute(
+        //   path: 'chat_room',
+        //   builder: (context, state) => const ChatRoomPage(chatroom: ,),
+        // ),
         GoRoute(
           path: 'post_write',
           builder: (context, state) => const PostWritePage(),

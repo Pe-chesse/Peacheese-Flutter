@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:peach_market/models/user.dart';
 
 class UserProfileImageWidget extends StatelessWidget {
@@ -9,10 +10,13 @@ class UserProfileImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-        radius: radius,
-        backgroundImage: user.image_url?.isEmpty??true
-            ? Image.asset('assets/images/default_user_profile_img.png').image
-            : Image.network(user.image_url!).image);
+    return GestureDetector(
+      onTap: ()=>user.nickname != null?context.go('/profile/',extra: user.nickname):null,
+      child: CircleAvatar(
+          radius: radius,
+          backgroundImage: user.image_url?.isEmpty??true
+              ? Image.asset('assets/images/default_user_profile_img.png').image
+              : Image.network(user.image_url!).image),
+    );
   }
 }

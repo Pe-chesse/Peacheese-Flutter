@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:peach_market/models/member.dart';
+import 'package:peach_market/models/roominfo.dart';
+import 'package:peach_market/providers/user.dart';
 import 'package:peach_market/utils/chat_thumbnail.dart';
+import 'package:peach_market/utils/time_ago.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
-class ChatRoomListTile extends StatelessWidget {
-  const ChatRoomListTile({super.key});
-  Widget listTileAvatar(List member) {
+class ChatRoomListTile extends ConsumerWidget {
+  const ChatRoomListTile({super.key, required this.roomInfo});
+
+  final RoomInfo roomInfo;
+
+  Widget listTileAvatar(List<Member> member) {
     double getAvatarScale(int n) {
       switch (n) {
         case 1:
@@ -21,46 +29,53 @@ class ChatRoomListTile extends StatelessWidget {
 
     List<Offset> widgetPos = calculatePoints(member.length);
     if (widgetPos.length == 1) {
-      return const UserProfileImageWidget();
+      return UserProfileImageWidget(
+        user: member.first,
+      );
     } else {
       return Stack(
         children: member
             .asMap()
             .entries
             .map((e) => Align(
-          alignment: Alignment(
-            widgetPos[e.key].dx,
-            widgetPos[e.key].dy,
-          ),
-          child: UserProfileImageWidget(
-              radius: getAvatarScale(member.length)),
-        ))
+                  alignment: Alignment(
+                    widgetPos[e.key].dx,
+                    widgetPos[e.key].dy,
+                  ),
+                  child: UserProfileImageWidget(
+                      radius: getAvatarScale(member.length), user: e.value),
+                ))
             .toList(),
       );
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return ListTile(
-      onTap: ()=>context.go('/chat_room'),
+      onTap: () => context.go('/chat_room'),
       leading: SizedBox(
         width: 48,
         height: 48,
-        child: listTileAvatar([0, 0]),
+        child: listTileAvatar(roomInfo.members),
       ),
-      title: const Text('행복한 복숭아 농장'),
-      subtitle: const Text('제발 헛소리좀 하지마세요...', maxLines: 1),
+      title: Text(roomInfo.members
+          .where((element) =>
+              element.nickname != ref.read(userStateNotifierProvider).nickname)
+          .map((e) => e.nickname)
+          .join(", ")),
+      subtitle: Text(roomInfo.content??'', maxLines: 1),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           const Spacer(),
+          if(roomInfo.unread > 0)
           CircleAvatar(
-            radius:12,
+            radius: 12,
             backgroundColor: Theme.of(context).primaryColor,
             child: Text(
-              '1',
+              '${roomInfo.unread}',
               style: Theme.of(context)
                   .textTheme
                   .titleSmall
@@ -68,7 +83,7 @@ class ChatRoomListTile extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          const Text('2시간 전'),
+          // Text(timeAgo(roomInfo.time)),
         ],
       ),
     );

@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:peach_market/models/chatroom.dart';
+import 'package:peach_market/providers/user.dart';
 import 'package:peach_market/widgets/bottom_sheet/chat_room.dart';
 import 'package:peach_market/widgets/chat/chat_box_from_me.dart';
 import 'package:peach_market/widgets/chat/chat_box_from_user.dart';
 
-class ChatRoomPage extends StatelessWidget {
-  const ChatRoomPage({super.key});
+class ChatRoomPage extends ConsumerWidget {
+  const ChatRoomPage({super.key, required this.chatroom});
+
+  final Chatroom chatroom;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final TextEditingController textController = TextEditingController();
     final chatboxMaxWidth = MediaQuery.of(context).size.width - 40 - 48 - 60;
     return Scaffold(
@@ -16,22 +21,28 @@ class ChatRoomPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('행복한 복숭아 농장'),
         actions: [
-          IconButton(onPressed: () => const ChatRoomBottomSheet().show(context), icon: const Icon(Icons.more_vert))
+          IconButton(
+              onPressed: () => const ChatRoomBottomSheet().show(context),
+              icon: const Icon(Icons.more_vert))
         ],
       ),
       body: Column(
         children: [
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  ChatBoxFromMeWidget(maxWidth: chatboxMaxWidth),
-                  ChatBoxFromUserWidget(maxWidth: chatboxMaxWidth)
-                ],
-              ),
+            child: ListView.builder(
+              itemCount: chatroom.messages.length,
+              itemBuilder: (context, index) => chatroom.messages[index].user ==
+                      ref.read(userStateNotifierProvider)
+                  ? ChatBoxFromMeWidget(
+                      maxWidth: chatboxMaxWidth,
+                      message: chatroom.messages[index])
+                  : ChatBoxFromUserWidget(
+                      maxWidth: chatboxMaxWidth,
+                      message: chatroom.messages[index],
+                    ),
             ),
-          ),Container(
+          ),
+          Container(
               decoration: const BoxDecoration(color: Colors.white),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: SafeArea(
@@ -48,13 +59,13 @@ class ChatRoomPage extends StatelessWidget {
                     // const SizedBox(width: 10),
                     Expanded(
                         child: TextFormField(
-                          minLines: 1,
-                          maxLines: 5,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: '메세지 입력하기...',
-                          ),
-                        )),
+                      minLines: 1,
+                      maxLines: 5,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '메세지 입력하기...',
+                      ),
+                    )),
                     SizedBox(
                       width: 36,
                       child: IconButton(

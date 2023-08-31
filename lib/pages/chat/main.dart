@@ -22,8 +22,8 @@ class _ChatMainPageState extends State<ChatMainPage> {
       body: Scrollbar(
         child: ListView(
           children: [
-            for(int i = 0; i<20;i++)
-            ChatRoomListTile()
+            // for(int i = 0; i<20;i++)
+            // ChatRoomListTile(roomInfo: )
           ],
         ),
       ),
