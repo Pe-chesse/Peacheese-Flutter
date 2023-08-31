@@ -30,6 +30,18 @@ class AccountAPI {
     }
   }
 
+  Future getFollow(String nickname,bool follow) async {
+    try {
+      Response response = await _dio.get(
+        'account/follow/$nickname/?f=${follow?'':'false'}',
+      );
+      print(response.data);
+      return response.data.map((e)=>Post.fromJson(e)).toList();
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+
   Future updateProfile(String user) async {
     try {
       return await _dio.put('account/profile/', data: {});

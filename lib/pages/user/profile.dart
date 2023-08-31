@@ -17,7 +17,7 @@ class UserProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final userState = ref.watch(userStateNotifierProvider);
     final profileState =
-        ref.watch(userprofileProvider(nickname ?? userState.nickname ?? ''));
+        ref.watch(userProfileProvider(nickname ?? userState.nickname ?? ''));
     return profileState.when(
         data: (data) => Scaffold(
               appBar: AppBar(
@@ -41,7 +41,7 @@ class UserProfilePage extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               InkWell(
-                                onTap: () => context.go('/follow'),
+                                onTap: () => context.go('/follow',extra: {'follower':true,'nickname':data['user'].nickname}),
                                 child: Column(
                                   children: [
                                     Text(
@@ -60,7 +60,7 @@ class UserProfilePage extends ConsumerWidget {
                               UserProfileImageWidget(
                                   radius: 36, user: data['user']),
                               InkWell(
-                                onTap: () => context.go('/follow'),
+                                onTap: () => context.go('/follow',extra: {'follower':false,'nickname':data['user'].nickname}),
                                 child: Column(
                                   children: [
                                     Text(

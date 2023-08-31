@@ -46,7 +46,10 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           path: 'follow',
-          builder: (context, state) => const UserFollowPage(),
+          builder: (context, state) {
+            final extra = state.extra as Map<String,dynamic>;
+            return UserFollowPage(follower: extra['follower'], nickname: extra['nickname'],);
+          },
         ),
       ],
     ),
