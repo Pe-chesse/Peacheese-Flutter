@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peach_market/services/api/account.dart';
 import 'package:peach_market/services/api/bucket.dart';
+import 'package:peach_market/services/api/chat.dart';
 import 'package:peach_market/services/api/post.dart';
 
 class API{
@@ -25,5 +26,6 @@ class API{
 
   static final AccountAPI account = AccountAPI(API.dio);
   static final BucketAPI bucket = BucketAPI(API.dio);
+  static final ChatAPI chat = ChatAPI(API.dio);
   static final PostAPI post = PostAPI(API.dio);
 }

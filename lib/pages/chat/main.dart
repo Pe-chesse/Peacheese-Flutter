@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:peach_market/providers/chat.dart';
 import 'package:peach_market/widgets/chat/room_list_tile.dart';
 
-class ChatMainPage extends StatefulWidget {
+class ChatMainPage extends ConsumerWidget {
   const ChatMainPage({super.key});
 
   @override
-  State<ChatMainPage> createState() => _ChatMainPageState();
-}
-
-class _ChatMainPageState extends State<ChatMainPage> {
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final state = ref.watch(chatinfoStateNotifierProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('🍑 채팅'),
@@ -20,12 +17,10 @@ class _ChatMainPageState extends State<ChatMainPage> {
         // ],
       ),
       body: Scrollbar(
-        child: ListView(
-          children: [
-            // for(int i = 0; i<20;i++)
-            // ChatRoomListTile(roomInfo: )
-          ],
-        ),
+        child: ListView.builder(
+            itemCount: state.data.length,
+            itemBuilder: (context, index) =>
+                ChatRoomListTile(roomInfo: state.data[index])),
       ),
     );
   }

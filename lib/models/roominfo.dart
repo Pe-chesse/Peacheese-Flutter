@@ -23,4 +23,21 @@ class RoomInfo {
 
   factory RoomInfo.fromJson(Map<String, dynamic> json) =>
       _$RoomInfoFromJson(json);
+
+
+  RoomInfo copyWith({
+    String? roomname,
+    List<Member>? members,
+    int? last_read,
+    int? unread,
+    String? content,
+  }) {
+    return RoomInfo(
+      roomname: roomname ?? this.roomname,
+      members: members ?? this.members,
+      last_read: last_read ?? this.last_read,
+      unread: unread ?? this.unread,
+      content: content ?? this.content,
+    );
+  }
 }

@@ -22,4 +22,17 @@ class Member extends User {
   );
 
   factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
+  Member copyWith({
+    String? email,
+    String? nickname,
+    String? image_url,
+    int? last_read_num,
+  }) {
+    return Member(
+      email: email ?? this.email,
+      nickname: nickname ?? this.nickname,
+      image_url: image_url ?? this.image_url,
+      last_read_num: last_read_num ?? this.last_read_num,
+    );
+  }
 }

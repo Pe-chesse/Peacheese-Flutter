@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:go_router/go_router.dart';
+import 'package:peach_market/models/chatroom.dart';
 import 'package:peach_market/pages/chat/room.dart';
 import 'package:peach_market/pages/post/detail.dart';
 import 'package:peach_market/pages/post/write.dart';
@@ -49,6 +50,13 @@ final GoRouter router = GoRouter(
           builder: (context, state) {
             final extra = state.extra as Map<String,dynamic>;
             return UserFollowPage(follower: extra['follower'], nickname: extra['nickname'],);
+          },
+        ),
+        GoRoute(
+          path: 'chatroom',
+          builder: (context, state) {
+            final extra = state.extra as String;
+            return ChatRoomPage(name: extra);
           },
         ),
       ],

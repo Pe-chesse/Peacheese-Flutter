@@ -53,35 +53,39 @@ class ChatRoomListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return ListTile(
-      onTap: () => context.go('/chat_room'),
+      onTap: () => context.go('/chatroom', extra: roomInfo.roomname),
       leading: SizedBox(
         width: 48,
         height: 48,
-        child: listTileAvatar(roomInfo.members),
+        child: listTileAvatar(roomInfo.members
+            .where((element) =>
+                element.nickname !=
+                ref.read(userStateNotifierProvider).nickname)
+            .toList()),
       ),
       title: Text(roomInfo.members
           .where((element) =>
               element.nickname != ref.read(userStateNotifierProvider).nickname)
           .map((e) => e.nickname)
           .join(", ")),
-      subtitle: Text(roomInfo.content??'', maxLines: 1),
+      subtitle: Text(roomInfo.content ?? '', maxLines: 1),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           const Spacer(),
-          if(roomInfo.unread > 0)
-          CircleAvatar(
-            radius: 12,
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Text(
-              '${roomInfo.unread}',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(color: Colors.white),
+          if (roomInfo.unread > 0)
+            CircleAvatar(
+              radius: 12,
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Text(
+                '${roomInfo.unread}',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(color: Colors.white),
+              ),
             ),
-          ),
           const Spacer(),
           // Text(timeAgo(roomInfo.time)),
         ],

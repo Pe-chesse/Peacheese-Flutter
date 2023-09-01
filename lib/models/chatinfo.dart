@@ -17,4 +17,15 @@ class ChatInfo {
 
   factory ChatInfo.fromJson(Map<String, dynamic> json) =>
       _$ChatroomFromJson(json);
+
+
+  ChatInfo copyWith({
+    List<RoomInfo>? data,
+    int? unread,
+  }) {
+    return ChatInfo(
+      data: data ?? this.data,
+      unread: unread ?? this.unread,
+    );
+  }
 }

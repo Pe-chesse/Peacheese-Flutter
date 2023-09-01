@@ -115,18 +115,23 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                               ?.copyWith(color: Colors.black45),
                         ),
                         const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(CupertinoIcons.chat_bubble),
-                            style: IconButton.styleFrom(
-                                side: BorderSide(
-                                    color: Theme.of(context).focusColor)),
-                          ),
-                        ),
                         if (data['user'].nickname != userState.nickname)
+                        ...[
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: IconButton(
+                              onPressed: () async {
+                                final response = await API.chat.create(data['user'].nickname);
+                                return context.go('/chatroom',extra: response.name);
+                              },
+                              icon: const Icon(CupertinoIcons.chat_bubble),
+                              style: IconButton.styleFrom(
+                                  side: BorderSide(
+                                      color: Theme.of(context).focusColor)),
+                            ),
+                          ),
                           FollowStateButton(user: data['user']),
+                        ],
                         const SizedBox(height: 30),
                         Container(
                           decoration: BoxDecoration(
