@@ -17,6 +17,7 @@ class FollowStateButton extends ConsumerWidget {
       onPressed: () async {
         stateNotifier.state = await API.account.setFollow(user.nickname!);
         state = stateNotifier.state;
+        ref.refresh(userProfileProvider(user.nickname!));
       },
       style:
           state.where((element) => element.nickname == user.nickname).isNotEmpty

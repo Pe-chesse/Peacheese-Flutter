@@ -51,139 +51,142 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
             return Scrollbar(
               child: DefaultTabController(
                 length: 2,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          InkWell(
-                            onTap: () => context.go('/follow', extra: {
-                              'follower': true,
-                              'nickname': data['user'].nickname
-                            }),
-                            child: Column(
-                              children: [
-                                Text(
-                                  '${data['user'].followers}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge,
-                                ),
-                                Text('followers',
+                child: RefreshIndicator(
+                  onRefresh: () async=> ref.refresh(userProfileProvider(widget.nickname ?? userState.nickname ?? '')),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            InkWell(
+                              onTap: () => context.go('/follow', extra: {
+                                'follower': true,
+                                'nickname': data['user'].nickname
+                              }),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '${data['user'].followers}',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodySmall),
-                              ],
+                                        .titleLarge,
+                                  ),
+                                  Text('followers',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                ],
+                              ),
                             ),
-                          ),
-                          UserProfileImageWidget(
-                              radius: 36, user: data['user']),
-                          InkWell(
-                            onTap: () => context.go('/follow', extra: {
-                              'follower': false,
-                              'nickname': data['user'].nickname
-                            }),
-                            child: Column(
-                              children: [
-                                Text(
-                                  '${data['user'].followings}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge,
-                                ),
-                                Text('followings',
+                            UserProfileImageWidget(
+                                radius: 36, user: data['user']),
+                            InkWell(
+                              onTap: () => context.go('/follow', extra: {
+                                'follower': false,
+                                'nickname': data['user'].nickname
+                              }),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '${data['user'].followings}',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodySmall),
-                              ],
+                                        .titleLarge,
+                                  ),
+                                  Text('followings',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                ],
+                              ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 30),
+                        Text(data['user'].nickname,
+                            style: Theme.of(context).textTheme.titleMedium),
+                        const SizedBox(height: 10),
+                        Text(
+                          data['user'].description ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(color: Colors.black45),
+                        ),
+                        const SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(CupertinoIcons.chat_bubble),
+                            style: IconButton.styleFrom(
+                                side: BorderSide(
+                                    color: Theme.of(context).focusColor)),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      Text(data['user'].nickname,
-                          style: Theme.of(context).textTheme.titleMedium),
-                      const SizedBox(height: 10),
-                      Text(
-                        data['user'].description ?? '',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: Colors.black45),
-                      ),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.chat_bubble),
-                          style: IconButton.styleFrom(
-                              side: BorderSide(
+                        ),
+                        if (data['user'].nickname != userState.nickname)
+                          FollowStateButton(user: data['user']),
+                        const SizedBox(height: 30),
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
                                   color: Theme.of(context).focusColor)),
+                          child: const Row(
+                            children: [
+                              Spacer(),
+                              TabBar(
+                                physics: NeverScrollableScrollPhysics(),
+                                isScrollable: true,
+                                indicatorColor: Colors.transparent,
+                                dividerColor: Colors.transparent,
+                                unselectedLabelColor: Colors.grey,
+                                tabs: [
+                                  Tab(icon: Icon(Icons.table_rows)),
+                                  Tab(icon: Icon(Icons.grid_view_sharp)),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      if (data['user'].nickname != userState.nickname)
-                        FollowStateButton(user: data['user']),
-                      const SizedBox(height: 30),
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Theme.of(context).focusColor)),
-                        child: const Row(
-                          children: [
-                            Spacer(),
-                            TabBar(
-                              physics: NeverScrollableScrollPhysics(),
-                              isScrollable: true,
-                              indicatorColor: Colors.transparent,
-                              dividerColor: Colors.transparent,
-                              unselectedLabelColor: Colors.grey,
-                              tabs: [
-                                Tab(icon: Icon(Icons.table_rows)),
-                                Tab(icon: Icon(Icons.grid_view_sharp)),
-                              ],
-                            ),
-                          ],
+                        SizedBox(
+                          width: double.infinity,
+                          height: box.maxHeight - 50,
+                          child: TabBarView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              ListView.separated(
+                                padding: const EdgeInsets.only(
+                                    top: 10, bottom: 30),
+                                itemCount: data['post'].length,
+                                itemBuilder: (context, index) =>
+                                    PostPreviewWidget(
+                                        post: data['post'][index]),
+                                separatorBuilder: (context, index) =>
+                                const Divider(height: 30),
+                              ),
+                              GridView.count(
+                                padding: const EdgeInsets.all(10),
+                                crossAxisCount: 3,
+                                childAspectRatio: 1 / 1,
+                                mainAxisSpacing: 12,
+                                crossAxisSpacing: 12,
+                                children: data['post']
+                                    .where((e) => e.image_url!.length != 0)
+                                    .map<Widget>((e) => InkWell(
+                                  onTap: () => context
+                                      .go('/post_detail/${e.id}'),
+                                  child: Image.network(
+                                      e.image_url!.first,
+                                      fit: BoxFit.cover),
+                                ))
+                                    .toList(),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: box.maxHeight - 50,
-                        child: TabBarView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          children: [
-                            ListView.separated(
-                              padding: const EdgeInsets.only(
-                                  top: 10, bottom: 30),
-                              itemCount: data['post'].length,
-                              itemBuilder: (context, index) =>
-                                  PostPreviewWidget(
-                                      post: data['post'][index]),
-                              separatorBuilder: (context, index) =>
-                              const Divider(height: 30),
-                            ),
-                            GridView.count(
-                              padding: const EdgeInsets.all(10),
-                              crossAxisCount: 3,
-                              childAspectRatio: 1 / 1,
-                              mainAxisSpacing: 12,
-                              crossAxisSpacing: 12,
-                              children: data['post']
-                                  .where((e) => e.image_url!.length != 0)
-                                  .map<Widget>((e) => InkWell(
-                                onTap: () => context
-                                    .go('/post_detail/${e.id}'),
-                                child: Image.network(
-                                    e.image_url!.first,
-                                    fit: BoxFit.cover),
-                              ))
-                                  .toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
