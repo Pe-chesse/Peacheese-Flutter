@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>593851971281-o5g6798tuptfepfhbkpt3pldfdrm0urb.apps.googleusercontent.com</string>
+	<string>593851971281-f86fb88m48olhrr3op8d044rp13dm976.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.593851971281-o5g6798tuptfepfhbkpt3pldfdrm0urb</string>
+	<string>com.googleusercontent.apps.593851971281-f86fb88m48olhrr3op8d044rp13dm976</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>593851971281-cg8bori560qnehl1hkg8h108s5a2bkjq.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBbuymvK2zWhULtivrPl3Lq6zRWuwF3R8A</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.peacheese.peachMarket</string>
+	<string>com.peacheese.peacheese</string>
 	<key>PROJECT_ID</key>
 	<string>peach-market-a370b</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:593851971281:ios:0c959b8a64ce5e09d2b7f0</string>
+	<string>1:593851971281:ios:2684db19ab8a28a2d2b7f0</string>
 </dict>
 </plist>
