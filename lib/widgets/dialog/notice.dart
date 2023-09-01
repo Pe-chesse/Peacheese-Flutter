@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peach_market/widgets/dialog/default.dart';
 
+// ignore: must_be_immutable
 class NoticeMessageDialog extends DefaultDialog {
     NoticeMessageDialog({super.key,required this.title,required this.content});
     final String title;
@@ -449,7 +450,7 @@ String service ='''
     Widget build(BuildContext context) {
         return CupertinoAlertDialog(
             title: Text(title),
-            content: Text(content?service:policy),
+            content: Text(content?service:policy,textAlign: TextAlign.start,),
             actions: [
                 CupertinoDialogAction(
                     onPressed: () => Navigator.of(

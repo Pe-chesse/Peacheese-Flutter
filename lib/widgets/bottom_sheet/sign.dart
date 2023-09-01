@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:peach_market/services/firebase/auth.dart';
 import 'package:peach_market/widgets/bottom_sheet/modal.dart';
 import 'package:peach_market/widgets/button/social_login.dart';
+import 'package:peach_market/widgets/dialog/notice.dart';
 
 class SignBottomSheet extends ModalBottomSheet {
   const SignBottomSheet({super.key});
@@ -38,7 +39,7 @@ class SignBottomSheet extends ModalBottomSheet {
                     platform: '애플'),
                 Center(
                     child: TextButton(
-                        onPressed: () => PeacheeseFirebaseAuth.guest(),
+                        onPressed: () => context.go('/'),
                         child: const Text('게스트로 둘러보기'))),
               ],
               Row(
@@ -63,6 +64,31 @@ class SignBottomSheet extends ModalBottomSheet {
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Theme.of(context).hintColor,
                           ),
+                    ),
+                  ),
+                ],
+              ),Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => NoticeMessageDialog(title: '이용약관', content: true).show(context),
+                    child: Text(
+                      '이용약관',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).hintColor,
+                      ),
+                    ),
+                  ),
+                  Text('|',
+                      style: TextStyle(color: Theme.of(context).hintColor)),
+                  TextButton(
+                    onPressed: () => NoticeMessageDialog(title: '개인정보 처리방침', content: false).show(context),
+                    child: Text(
+                      '개인정보 처리방침',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).hintColor,
+                      ),
                     ),
                   ),
                 ],

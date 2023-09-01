@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:peach_market/models/post.dart';
 import 'package:peach_market/utils/time_ago.dart';
-import 'package:peach_market/widgets/bottom_sheet/post.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
 class PostPreviewWidget extends StatelessWidget {

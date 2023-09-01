@@ -5,7 +5,6 @@ import 'package:peach_market/models/member.dart';
 import 'package:peach_market/models/roominfo.dart';
 import 'package:peach_market/providers/user.dart';
 import 'package:peach_market/utils/chat_thumbnail.dart';
-import 'package:peach_market/utils/time_ago.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
 class ChatRoomListTile extends ConsumerWidget {

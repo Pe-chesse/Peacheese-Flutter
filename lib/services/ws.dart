@@ -18,6 +18,7 @@ class WebSocketManager {
   }
 
   void sendMessage(String message) {
+    // ignore: unnecessary_null_comparison
     if (_channel != null && _channel.sink != null) {
       _channel.sink.add(message);
     }

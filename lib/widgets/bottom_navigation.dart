@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +34,10 @@ class MainBottomNavigationState extends ConsumerState<MainBottomNavigation> {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: pageState,
           onTap: (value) {
+            if(FirebaseAuth.instance.currentUser == null){
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('로그인이 필요한 서비스입니다.\n로그인 해주세요.')));
+              return context.go('/sign');
+            }
             if (value == 2) {
               context.go('/post_write');
             } else {

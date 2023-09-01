@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:peach_market/models/chatroom.dart';
 import 'package:peach_market/pages/chat/room.dart';
 import 'package:peach_market/pages/post/detail.dart';
 import 'package:peach_market/pages/post/write.dart';
@@ -15,7 +16,17 @@ import 'package:peach_market/widgets/bottom_navigation.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/sign',
+
   observers: [FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)],
+  redirect: (BuildContext context, GoRouterState state) {
+    if (FirebaseAuth.instance.currentUser == null && !(['/','/sign'].contains(state.uri.toString())||state.uri.toString().replaceAll('/', '').startsWith('post_detail'))) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('로그인이 필요한 서비스입니다.\n로그인 해주세요.')));
+        return '/sign';
+    }
+      return null;
+  },
+
+
   routes: [
     GoRoute(
       path: '/',

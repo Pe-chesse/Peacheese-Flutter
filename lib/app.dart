@@ -35,8 +35,8 @@ class AppState extends ConsumerState<App> {
       if (!user.emailVerified) {
         return await FirebaseAuth.instance.signOut();
       }
-      wsConnect();
       await ref.read(userStateNotifierProvider.notifier).get();
+      wsConnect();
       if (ref.read(userStateNotifierProvider).nickname == null) {
         return router.go('/profile_edit');
       }
@@ -50,7 +50,9 @@ class AppState extends ConsumerState<App> {
           }
           wsConnect();
         } else {
-          ws.disconnect();
+          try {
+            ws.disconnect();
+          } catch (_) {}
         }
       },
     ));
@@ -63,17 +65,27 @@ class AppState extends ConsumerState<App> {
       final socketData = jsonDecode(data);
       switch (socketData['type']) {
         case "sync.message":
-          return ref.read(chatinfoStateNotifierProvider.notifier).set(ChatInfo.fromJson(socketData));
+          return ref
+              .read(chatinfoStateNotifierProvider.notifier)
+              .set(ChatInfo.fromJson(socketData));
         case "chat_room.info":
-          return ref.read(chatroomStateNotifierProvider.notifier).join(Chatroom.fromJson(socketData));
+          return ref
+              .read(chatroomStateNotifierProvider.notifier)
+              .join(Chatroom.fromJson(socketData));
         case "chat.message":
-          return ref.read(chatroomStateNotifierProvider.notifier).addMessage(Message.fromJson(socketData));
+          return ref
+              .read(chatroomStateNotifierProvider.notifier)
+              .addMessage(Message.fromJson(socketData));
         case "update.read":
-          ref.read(chatinfoStateNotifierProvider.notifier).readUpdate(socketData,ref.read(userStateNotifierProvider));
-          final statenotifier = ref.read(chatroomStateNotifierProvider.notifier);
-          if(statenotifier.state.name == socketData['chat_room']){
+          ref
+              .read(chatinfoStateNotifierProvider.notifier)
+              .readUpdate(socketData, ref.read(userStateNotifierProvider));
+          final statenotifier =
+              ref.read(chatroomStateNotifierProvider.notifier);
+          if (statenotifier.state.name == socketData['chat_room']) {
             statenotifier.readUpdate(socketData);
-          }return;
+          }
+          return;
         default:
           return;
       }

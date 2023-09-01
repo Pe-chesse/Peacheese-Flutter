@@ -21,6 +21,7 @@ class BucketAPI {
       );
 
       FormData formData = FormData.fromMap({
+        // ignore: unnecessary_null_comparison
         'files': multipartImages.where((element) => element != null).toList(),
       });
 

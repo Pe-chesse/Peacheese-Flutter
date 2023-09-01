@@ -6,7 +6,6 @@ import 'package:peach_market/providers/post.dart';
 import 'package:peach_market/providers/user.dart';
 import 'package:peach_market/services/api.dart';
 import 'package:peach_market/widgets/dialog/default.dart';
-import 'package:peach_market/widgets/dialog/image_picker.dart';
 import 'package:peach_market/widgets/sign/textfield.dart';
 
 class UserProfileEditPage extends ConsumerWidget {

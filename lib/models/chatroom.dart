@@ -3,7 +3,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:peach_market/models/member.dart';
 import 'package:peach_market/models/message.dart';
-import 'package:peach_market/models/roominfo.dart';
 
 part 'chatroom.g.dart';
 
