@@ -28,6 +28,9 @@ class AppState extends ConsumerState<App> {
         return await FirebaseAuth.instance.signOut();
       }
       await ref.read(userStateNotifierProvider.notifier).get();
+      if(ref.read(userStateNotifierProvider).nickname == null){
+        return router.go('/profile_edit');
+      }
       router.go('/');
     });
     WidgetsBinding.instance.addObserver(AppLifecycleObserver(
