@@ -10,6 +10,7 @@ import 'package:peach_market/pages/sign/email_sign_up.dart';
 import 'package:peach_market/pages/user/follow.dart';
 import 'package:peach_market/pages/user/profile.dart';
 import 'package:peach_market/pages/user/profile_edit.dart';
+import 'package:peach_market/pages/user/search.dart';
 import 'package:peach_market/widgets/bottom_navigation.dart';
 
 final GoRouter router = GoRouter(
@@ -33,13 +34,13 @@ final GoRouter router = GoRouter(
             return UserProfilePage(nickname: nickname);
           },
         ),
-        // GoRoute(
-        //   path: 'chat_room',
-        //   builder: (context, state) => const ChatRoomPage(chatroom: ,),
-        // ),
         GoRoute(
           path: 'post_write',
           builder: (context, state) => const PostWritePage(),
+        ),
+        GoRoute(
+          path: 'search',
+          builder: (context, state) => UserSearchPage(),
         ),
         GoRoute(
           path: 'profile_edit',

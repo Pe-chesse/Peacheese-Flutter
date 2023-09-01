@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:peach_market/providers/post.dart';
 import 'package:peach_market/widgets/post/preview.dart';
 
@@ -22,7 +23,7 @@ class HomePageState extends ConsumerState<HomePage> {
           title: const Text('🍑 Peacheese'),
           actions: [
             IconButton(
-                onPressed: () {}, icon: const Icon(CupertinoIcons.search))
+                onPressed: () =>context.go('/search'), icon: const Icon(CupertinoIcons.search))
           ],
         ),
         body: state.when(

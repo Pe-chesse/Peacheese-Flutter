@@ -16,6 +16,17 @@ class AccountAPI {
     }
   }
 
+  Future search(String nickname) async {
+    try {
+      Response response = await _dio.get(
+        'account/search/?user=$nickname',
+      );
+      return response.data.map((e)=>User.fromJson(e)).toList();
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+
   Future getProfile(String user) async {
     try {
       Response response = await _dio.get(
