@@ -14,7 +14,6 @@ class PostWritePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final imageKeyState = ref.watch(imageKeyProvider);
-    print(ref.read(userStateNotifierProvider));
     final TextEditingController editingController = TextEditingController();
     return Scaffold(
       appBar: AppBar(

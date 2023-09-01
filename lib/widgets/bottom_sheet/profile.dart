@@ -13,7 +13,10 @@ class UserProfileBottomSheet extends ModalBottomSheet {
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
-            onTap: ()=> context.go('/profile_edit'),
+            onTap: (){
+              Navigator.of(context).pop();
+              return context.go('/profile_edit');
+            },
             title: Text('프로필 수정'),
           ),
           ListTile(

@@ -8,22 +8,33 @@ import 'package:peach_market/widgets/bottom_sheet/profile.dart';
 import 'package:peach_market/widgets/post/preview.dart';
 import 'package:peach_market/widgets/user/profile_image.dart';
 
-class UserProfilePage extends ConsumerWidget {
+class UserProfilePage extends ConsumerStatefulWidget {
   const UserProfilePage({super.key, this.nickname});
 
   final String? nickname;
 
   @override
-  Widget build(BuildContext context, ref) {
+  UserProfilePageState createState() => UserProfilePageState();
+}
+
+class UserProfilePageState extends ConsumerState<UserProfilePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ref.read(userStateNotifierProvider.notifier).get();
+  }
+  @override
+  Widget build(BuildContext context) {
     final userState = ref.watch(userStateNotifierProvider);
     final profileState =
-        ref.watch(userProfileProvider(nickname ?? userState.nickname ?? ''));
+        ref.watch(userProfileProvider(widget.nickname ?? userState.nickname ?? ''));
     return profileState.when(
         data: (data) => Scaffold(
               appBar: AppBar(
-                title: Text(nickname ?? '🍑 내 정보'),
+                title: Text(widget.nickname ?? '🍑 내 정보'),
                 actions: [
-                  if (nickname == null)
+                  if (widget.nickname == null)
                     IconButton(
                         onPressed: () =>
                             const UserProfileBottomSheet().show(context),
@@ -41,7 +52,10 @@ class UserProfilePage extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               InkWell(
-                                onTap: () => context.go('/follow',extra: {'follower':true,'nickname':data['user'].nickname}),
+                                onTap: () => context.go('/follow', extra: {
+                                  'follower': true,
+                                  'nickname': data['user'].nickname
+                                }),
                                 child: Column(
                                   children: [
                                     Text(
@@ -60,7 +74,10 @@ class UserProfilePage extends ConsumerWidget {
                               UserProfileImageWidget(
                                   radius: 36, user: data['user']),
                               InkWell(
-                                onTap: () => context.go('/follow',extra: {'follower':false,'nickname':data['user'].nickname}),
+                                onTap: () => context.go('/follow', extra: {
+                                  'follower': false,
+                                  'nickname': data['user'].nickname
+                                }),
                                 child: Column(
                                   children: [
                                     Text(
@@ -140,7 +157,7 @@ class UserProfilePage extends ConsumerWidget {
                               physics: const NeverScrollableScrollPhysics(),
                               children: [
                                 ListView.separated(
-                                  padding: const EdgeInsets.only(top: 10),
+                                  padding: const EdgeInsets.only(top: 10,bottom: 30),
                                   itemCount: data['post'].length,
                                   itemBuilder: (context, index) =>
                                       PostPreviewWidget(
@@ -154,10 +171,13 @@ class UserProfilePage extends ConsumerWidget {
                                   childAspectRatio: 1 / 1,
                                   mainAxisSpacing: 12,
                                   crossAxisSpacing: 12,
-                                  children: data['post'].where((e)=>e.image_url!.length != 0)
-                                      .map<Widget>((e) =>
-                                      Image.network(e.first, fit: BoxFit.cover))
-                                      .toList(),
+                                  children: data['post']
+                                      .where((e) => e.image_url!.length != 0)
+                                      .map<Widget>((e) =>InkWell(
+                                    onTap: ()=> context.go('/post_detail/${e.id}'),
+                                        child: Image.network(e.image_url!.first,
+                                        fit: BoxFit.cover),
+                                      )).toList(),
                                 ),
                               ],
                             ),
