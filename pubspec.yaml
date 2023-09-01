@@ -46,6 +46,8 @@ dependencies:
   sign_in_with_apple: ^5.0.0
   web_socket_channel: ^2.4.0
   image_picker: ^1.0.4
+  firebase_messaging: ^14.6.7
+  flutter_local_notifications: ^15.1.1
 
 dev_dependencies:
   flutter_test:

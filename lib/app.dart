@@ -24,6 +24,7 @@ class AppState extends ConsumerState<App> {
   @override
   void initState() {
     super.initState();
+
     FirebaseAuth.instance.authStateChanges().listen((user) async {
       if (user == null) {
         return router.go('/sign');
