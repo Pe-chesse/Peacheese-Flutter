@@ -12,12 +12,6 @@ class UserFollowTileWidget extends StatelessWidget {
     return ListTile(
       leading: UserProfileImageWidget(user: user),
       title: Text(user.nickname??'알 수 없음',style: Theme.of(context).textTheme.titleMedium,),
-      subtitle: Text(
-        user.description??'',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: Theme.of(context).hintColor),
-      ),
       trailing: FollowStateButton(user: user),
     );
   }
