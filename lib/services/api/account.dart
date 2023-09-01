@@ -35,7 +35,18 @@ class AccountAPI {
       Response response = await _dio.get(
         'account/follow/$nickname/?f=${follow?'':'false'}',
       );
-      return response.data.map((e)=>Post.fromJson(e)).toList();
+      return response.data.map((e)=>User.fromJson(e)).toList();
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+
+  Future setFollow(String nickname) async {
+    try {
+      Response response = await _dio.post(
+        'account/follow/$nickname/',
+      );
+      return response.data.map((e)=>User.fromJson(e)).toList();
     } on DioException catch (e) {
       return e.response;
     }
