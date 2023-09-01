@@ -27,12 +27,15 @@ class HomePageState extends ConsumerState<HomePage> {
         ),
         body: state.when(
             data: (data) => Scrollbar(
-                  child: ListView.separated(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) =>
-                        PostPreviewWidget(post: data[index]),
-                    separatorBuilder: (context, index) =>
-                        const Divider(height: 30),
+                  child: RefreshIndicator(
+                    onRefresh: () async =>ref.refresh(postlistProvider),
+                    child: ListView.separated(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) =>
+                          PostPreviewWidget(post: data[index]),
+                      separatorBuilder: (context, index) =>
+                          const Divider(height: 30),
+                    ),
                   ),
                 ),
             error: (error, stackTrace) =>  Center(child: Text('$error')),
