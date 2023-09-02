@@ -9,9 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  FCMManager fcmManager = FCMManager();
-  await fcmManager.initializeFCM();
-  fcmManager.loadFCMListener();
+  await FCMHandler.initializeFCM();
 
   runApp(const ProviderScope(child: App()));
 }

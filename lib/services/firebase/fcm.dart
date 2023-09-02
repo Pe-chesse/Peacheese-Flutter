@@ -1,61 +1,65 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:peach_market/firebase_options.dart';
+import 'package:peach_market/providers/chat.dart';
 
-class FCMManager {
+class FCMHandler {
   static const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'peacheese', // id
-    '🍑 Peacheese', // title
+    'peacheese',
+    'peacheese',
     importance: Importance.max,
     enableVibration: true,
     playSound: true,
     enableLights: true,
   );
 
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  bool isFlutterLocalNotificationsInitialized = false;
+  static late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  FCMManager() {
-    initializeFCM();
-  }
+  static bool isFlutterLocalNotificationsInitialized = false;
 
-  Future<void> initializeFCM() async {
-    if (isFlutterLocalNotificationsInitialized) {
-      return;
+  static Future initializeFCM() async {
+    if (!isFlutterLocalNotificationsInitialized) {
+      flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+      await flutterLocalNotificationsPlugin.initialize(
+        const InitializationSettings(
+          android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+          iOS: DarwinInitializationSettings(),
+        ),
+      );
+      if (Platform.isAndroid) {
+        final permissionsGranted = await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()!
+            .requestPermission();
+        await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
+            ?.createNotificationChannel(channel);
+      } else {
+        await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                IOSFlutterLocalNotificationsPlugin>()
+            ?.requestPermissions(sound: true, alert: true, badge: true);
+      }
+      isFlutterLocalNotificationsInitialized = true;
     }
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    if (Platform.isAndroid) {
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-          ?.createNotificationChannel(channel);
-    } else {
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(sound: true, alert: true, badge: true);
-    }
-
-    await flutterLocalNotificationsPlugin.initialize(
-      const InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-        iOS: DarwinInitializationSettings(),
-      ),
-    );
-
-    isFlutterLocalNotificationsInitialized = true;
   }
 
-  Future<void> onFCMHandler(RemoteMessage message) async {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-    await fcmPlugin();
+  @pragma('vm:entry-point')
+  static Future onFCMHandler(RemoteMessage message) async {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    await initializeFCM();
+
   }
 
-  Future<void> fcmPlugin() async {
-    // Your fcmPlugin code goes here
-  }
-
-  void loadFCMListener() {
+  static void loadFCMListener(WidgetsBindingObserver observer,WidgetRef ref) {
+    WidgetsBinding.instance.addObserver(observer);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification? notification = message.notification;
       var androidNotiDetails = AndroidNotificationDetails(
@@ -65,19 +69,27 @@ class FCMManager {
       var iOSNotiDetails = const DarwinNotificationDetails(
           presentAlert: true, presentBadge: true, presentSound: true);
       var details =
-      NotificationDetails(android: androidNotiDetails, iOS: iOSNotiDetails);
+          NotificationDetails(android: androidNotiDetails, iOS: iOSNotiDetails);
       if (notification != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          details,
-        );
+        if(ref.read(chatroomStateNotifierProvider).name != message.data['room_name']){
+          flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            details,
+          );
+        }
+        print(ref.read(chatroomStateNotifierProvider).name);
+        print(message.data);
       }
       await onFCMHandler(message);
     });
+
     FirebaseMessaging.onBackgroundMessage(onFCMHandler);
+
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      // Handle the event when a push notification is tapped.
+      print(message);
     });
   }
 }

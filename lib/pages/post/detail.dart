@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -84,7 +85,7 @@ class PostDetailPageState extends ConsumerState<PostDetailPage> {
                               ),
                             ],
                           ),
-                        ),
+                        ),if(FirebaseAuth.instance.currentUser != null)
                         Center(
                           child: TextButton(
                             style: TextButton.styleFrom(
@@ -131,6 +132,7 @@ class PostDetailPageState extends ConsumerState<PostDetailPage> {
                     ),
                   ),
                 ),
+                if(FirebaseAuth.instance.currentUser != null)
                 CommentInputWidget(postId: post.id)
               ],
             ),
