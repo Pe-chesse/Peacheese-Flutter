@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peach_market/services/firebase/auth.dart';
 import 'package:peach_market/widgets/sign/textfield.dart';
 
 class SignUpEmailPage extends StatefulWidget {
@@ -39,7 +40,9 @@ class _SignUpEmailPageState extends State<SignUpEmailPage> {
               CustomTextField.password(passwordController),
               const SizedBox(height: 56),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async{
+                  await PeacheeseFirebaseAuth.emailSignUp(context, emailController.text, passwordController.text);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor,
                   foregroundColor: Colors.white,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:peach_market/services/firebase/auth.dart';
 import 'package:peach_market/widgets/sign/textfield.dart';
 
 class SignInEmailPage extends StatefulWidget {
@@ -51,7 +52,7 @@ class _SignInEmailPageState extends State<SignInEmailPage> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async => await PeacheeseFirebaseAuth.emailSignIn(context, emailController.text, passwordController.text),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor,
                   foregroundColor: Colors.white,
