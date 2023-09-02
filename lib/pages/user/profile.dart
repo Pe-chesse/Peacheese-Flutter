@@ -42,7 +42,7 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
             IconButton(
                 onPressed: () =>
                     const UserProfileBottomSheet().show(context),
-                icon: const Icon(Icons.more_vert))
+                icon: const Icon(Icons.more_vert)),
         ],
       ),
       body: profileState.when(

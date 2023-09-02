@@ -19,7 +19,7 @@ final GoRouter router = GoRouter(
 
   observers: [FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)],
   redirect: (BuildContext context, GoRouterState state) {
-    if (FirebaseAuth.instance.currentUser == null && !(['/','/sign'].contains(state.uri.toString())||state.uri.toString().replaceAll('/', '').startsWith('post_detail'))) {
+    if (FirebaseAuth.instance.currentUser == null && !(['/','/sign','/sign/email_sign_in','/sign/email_sign_up'].contains(state.uri.toString())||state.uri.toString().replaceAll('/', '').startsWith('post_detail'))) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('로그인이 필요한 서비스입니다.\n로그인 해주세요.')));
         return '/sign';
     }

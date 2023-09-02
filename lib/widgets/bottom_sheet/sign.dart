@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:peach_market/services/firebase/auth.dart';
@@ -39,7 +40,10 @@ class SignBottomSheet extends ModalBottomSheet {
                     platform: '애플'),
                 Center(
                     child: TextButton(
-                        onPressed: () => context.go('/'),
+                        onPressed: () async{
+                          await FirebaseAuth.instance.signOut();
+                          context.go('/');
+                        },
                         child: const Text('게스트로 둘러보기'))),
               ],
               Row(

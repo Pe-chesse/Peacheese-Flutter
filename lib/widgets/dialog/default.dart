@@ -21,6 +21,7 @@ class DefaultMessageDialog extends DefaultDialog {
   final String title;
   final Widget? content;
 
+  @override
   Future<void> show(BuildContext context) async {
     showDialog(
       context: context,
