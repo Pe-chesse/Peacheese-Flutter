@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:peach_market/models/post.dart';
 import 'package:peach_market/models/user.dart';
 
@@ -9,7 +10,10 @@ class AccountAPI {
 
   Future verify() async {
     try {
-      Response response = await _dio.get('account/verify/');
+      Response response = await _dio.get('account/verify/',
+          options: Options(headers: {
+            'Fcmtoken': 'Bearer ${await FirebaseMessaging.instance.getToken()}'
+          }));
       return User.fromJson(response.data);
     } on DioException catch (e) {
       return e.response;
@@ -21,7 +25,7 @@ class AccountAPI {
       Response response = await _dio.get(
         'account/search/?user=$nickname',
       );
-      return response.data.map((e)=>User.fromJson(e)).toList();
+      return response.data.map((e) => User.fromJson(e)).toList();
     } on DioException catch (e) {
       return e.response;
     }
@@ -34,19 +38,19 @@ class AccountAPI {
       );
       return {
         'user': User.fromJson(response.data['user']),
-        'post': response.data['post'].map((e)=>Post.fromJson(e)).toList()
+        'post': response.data['post'].map((e) => Post.fromJson(e)).toList()
       };
     } on DioException catch (e) {
       return e.response;
     }
   }
 
-  Future getFollow(String nickname,bool follow) async {
+  Future getFollow(String nickname, bool follow) async {
     try {
       Response response = await _dio.get(
-        'account/follow/$nickname/?f=${follow?'':'false'}',
+        'account/follow/$nickname/?f=${follow ? '' : 'false'}',
       );
-      return response.data.map((e)=>User.fromJson(e)).toList();
+      return response.data.map((e) => User.fromJson(e)).toList();
     } on DioException catch (e) {
       return e.response;
     }
@@ -57,17 +61,15 @@ class AccountAPI {
       Response response = await _dio.post(
         'account/follow/$nickname/',
       );
-      return response.data.map((e)=>User.fromJson(e)).toList();
+      return response.data.map((e) => User.fromJson(e)).toList();
     } on DioException catch (e) {
       return e.response;
     }
   }
 
-  Future editProfile(Map<String,dynamic> data) async {
+  Future editProfile(Map<String, dynamic> data) async {
     try {
-      Response response = await _dio.put(
-        'account/profile/',data: data
-      );
+      Response response = await _dio.put('account/profile/', data: data);
       return User.fromJson(response.data);
     } on DioException catch (e) {
       return e.response;

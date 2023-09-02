@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:peach_market/widgets/dialog/default.dart';
 import 'package:peach_market/widgets/dialog/email_verify.dart';
@@ -88,10 +89,10 @@ class PeacheeseFirebaseAuth {
           content: Text('기입된 이메일은 이미 사용중인 이메일입니다.'),
         ).show(context);
       } else if (e.code == 'success-sign-up') {
-        return DefaultMessageDialog(
+        return showDialog(context: context, builder: (context) => DefaultMessageDialog(
           title: '회원가입 완료',
           content: Text('$email\n인증요청을 전송했습니다\n\n메일 내부의 링크를 클릭하시면 인증이 완료됩니다.'),
-        ).show(context);
+        )).then((value) => context.go('/sign/email_sign_in'));
       }
     }
   }
