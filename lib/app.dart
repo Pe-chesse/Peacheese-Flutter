@@ -33,6 +33,7 @@ class AppState extends ConsumerState<App> with WidgetsBindingObserver {
       }
       if (user.emailVerified) {
       await ref.read(userStateNotifierProvider.notifier).get();
+      print(ref.read(userStateNotifierProvider));
       wsConnect();
       if (ref.read(userStateNotifierProvider).nickname == null) {
         return router.go('/profile_edit');

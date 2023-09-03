@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:peach_market/models/comment.dart';
 import 'package:peach_market/models/post.dart';
+import 'package:peach_market/providers/post.dart';
 
 class PostAPI {
   final Dio _dio;
@@ -32,6 +34,32 @@ class PostAPI {
         if (imageKey.isNotEmpty) 'image_keys': imageKey
       });
       return response.data['id'];
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+  Future editPost(int postId,String body) async {
+    try {
+      Response response = await _dio.put('post/$postId/', data: {
+        'body': body,
+      });
+      return response.data['id'];
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+  Future deletePost(int postId) async {
+    try {
+      Response response = await _dio.delete('post/$postId/');
+      return response.statusCode == 204;
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+  Future deleteComment(int commentId) async {
+    try {
+      Response response = await _dio.delete('post/comment/$commentId/');
+      return response.statusCode == 204;
     } on DioException catch (e) {
       return e.response;
     }

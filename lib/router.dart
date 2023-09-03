@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:peach_market/models/post.dart';
 import 'package:peach_market/pages/chat/room.dart';
 import 'package:peach_market/pages/post/detail.dart';
 import 'package:peach_market/pages/post/write.dart';
@@ -16,7 +17,6 @@ import 'package:peach_market/widgets/bottom_navigation.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/sign',
-
   observers: [FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)],
   redirect: (BuildContext context, GoRouterState state) {
     if (FirebaseAuth.instance.currentUser == null && !(['/','/sign','/sign/email_sign_in','/sign/email_sign_up'].contains(state.uri.toString())||state.uri.toString().replaceAll('/', '').startsWith('post_detail'))) {
@@ -47,7 +47,10 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           path: 'post_write',
-          builder: (context, state) => const PostWritePage(),
+          builder: (context, state) {
+          final post = state.extra as Post?;
+          return PostWritePage(post: post);
+          }
         ),
         GoRoute(
           path: 'search',

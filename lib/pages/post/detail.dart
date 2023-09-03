@@ -35,7 +35,7 @@ class PostDetailPageState extends ConsumerState<PostDetailPage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          if (post.user == user)
+          if (post.user.email == user.email)
             IconButton(
               onPressed: () =>PostBottomSheet(post: post,).show(context),
               icon: const Icon(Icons.more_vert),

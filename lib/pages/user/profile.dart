@@ -53,6 +53,7 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                 child: RefreshIndicator(
                   onRefresh: () async=> ref.refresh(userProfileProvider(widget.nickname ?? userState.nickname ?? '')),
                   child: SingleChildScrollView(
+                    physics: const ClampingScrollPhysics(),
                     child: Column(
                       children: [
                         Row(
@@ -160,6 +161,7 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                             physics: const NeverScrollableScrollPhysics(),
                             children: [
                               ListView.separated(
+                                physics: const ClampingScrollPhysics(),
                                 padding: const EdgeInsets.only(
                                     top: 10, bottom: 30),
                                 itemCount: data['post'].length,
@@ -170,6 +172,7 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                                 const Divider(height: 30),
                               ),
                               GridView.count(
+                                physics: const ClampingScrollPhysics(),
                                 padding: const EdgeInsets.all(10),
                                 crossAxisCount: 3,
                                 childAspectRatio: 1 / 1,
